@@ -1,6 +1,6 @@
 # Visualizador de Dados
 
-Um site que roda **offline** (sem internet, sem instalar nada) para importar
+Um projeto de análise de dados de um site que roda **offline** (sem internet, sem instalar nada) para importar
 planilhas (`.xlsx`, `.xlsm`, `.csv`) e montar gráficos configuráveis, organizá-los
 livremente na tela e exportar em imagem ou PDF.
 
