@@ -1,0 +1,270 @@
+/* =============================================================================
+   style.css  —  Aparência do site.
+   -----------------------------------------------------------------------------
+   TEMA: mexa apenas no bloco :root abaixo para mudar as cores principais.
+   Tudo no site usa essas variáveis, então trocar aqui muda o site inteiro.
+   (A paleta DOS GRÁFICOS fica em js/config.js -> paletaGraficos.)
+   ============================================================================= */
+
+:root {
+  /* --- Cores do tema (troque aqui) --- */
+  --cor-canvas:      #f4f6f8;   /* fundo geral da página        */
+  --cor-superficie:  #ffffff;   /* fundo de cartões/painéis     */
+  --cor-superficie-2:#eef1f4;   /* fundo secundário (hover etc.)*/
+  --cor-borda:       #d9dee4;   /* linhas e contornos           */
+  --cor-texto:       #1f2a37;   /* texto principal              */
+  --cor-texto-fraco: #6b7480;   /* texto secundário             */
+  --cor-primaria:    #2f6690;   /* ação principal (botões)      */
+  --cor-primaria-ft: #ffffff;   /* texto sobre a cor primária   */
+  --cor-primaria-h:  #26557a;   /* primária em hover            */
+  --cor-perigo:      #b3453e;   /* excluir / ações destrutivas  */
+  --cor-perigo-ft:   #ffffff;
+  --cor-sucesso:     #3f7d55;
+
+  /* --- Medidas --- */
+  --raio:      10px;
+  --raio-sm:   7px;
+  --sombra:    0 1px 2px rgba(16,24,40,.06), 0 4px 12px rgba(16,24,40,.06);
+  --sombra-lg: 0 8px 30px rgba(16,24,40,.16);
+  --gap:       16px;
+  --topo-altura: 60px;
+
+  /* --- Tipografia --- */
+  --fonte: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--cor-canvas);
+  color: var(--cor-texto);
+  font-family: var(--fonte);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* ---------- Botões (base reutilizável) ------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit; font-weight: 600;
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, transform .04s ease;
+  white-space: nowrap;
+}
+.btn:hover  { background: var(--cor-superficie-2); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--cor-primaria); outline-offset: 2px; }
+.btn--primario { background: var(--cor-primaria); border-color: var(--cor-primaria); color: var(--cor-primaria-ft); }
+.btn--primario:hover { background: var(--cor-primaria-h); border-color: var(--cor-primaria-h); }
+.btn--perigo { background: var(--cor-perigo); border-color: var(--cor-perigo); color: var(--cor-perigo-ft); }
+.btn--fantasma { background: transparent; border-color: transparent; }
+.btn--fantasma:hover { background: var(--cor-superficie-2); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ---------- Barra superior -------------------------------------------------- */
+.topo {
+  height: var(--topo-altura);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 18px;
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  position: sticky; top: 0; z-index: 20;
+}
+.topo__marca { font-size: 16px; font-weight: 700; letter-spacing: .2px; }
+.topo__spacer { flex: 1; }
+.topo__acoes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.topo__layout { display: flex; align-items: center; gap: 6px; color: var(--cor-texto-fraco); }
+.topo__layout select { padding: 6px 8px; border-radius: var(--raio-sm); border: 1px solid var(--cor-borda); background: var(--cor-superficie); font: inherit; }
+
+/* Indicador de autosave */
+.autosave { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--cor-texto-fraco); }
+.autosave__ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--cor-sucesso); }
+.autosave--off .autosave__ponto { background: var(--cor-texto-fraco); }
+
+/* ---------- Área principal -------------------------------------------------- */
+.palco { padding: var(--gap); }
+
+/* Estado vazio / importação (dropzone) */
+.dropzone {
+  max-width: 560px; margin: 8vh auto; text-align: center;
+  border: 2px dashed var(--cor-borda); border-radius: var(--raio);
+  background: var(--cor-superficie);
+  padding: 48px 32px;
+  transition: border-color .15s ease, background .15s ease;
+}
+.dropzone--ativa { border-color: var(--cor-primaria); background: var(--cor-superficie-2); }
+.dropzone h2 { margin: 0 0 6px; font-size: 20px; }
+.dropzone p  { margin: 0 0 20px; color: var(--cor-texto-fraco); }
+
+/* ---------- Grade de gráficos (gridstack) ---------------------------------- */
+.grid-stack { background: transparent; }
+
+/* Cartão de gráfico */
+.cartao {
+  height: 100%;
+  display: flex;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+/* Barra lateral esquerda com os 4 botões (config, filtro, exportar, excluir) */
+.cartao__rail {
+  flex: 0 0 46px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 8px 0;
+  background: var(--cor-superficie-2);
+  border-right: 1px solid var(--cor-borda);
+}
+.rail-btn {
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border: 1px solid transparent; border-radius: var(--raio-sm);
+  background: transparent; color: var(--cor-texto);
+  cursor: pointer;
+}
+.rail-btn:hover { background: var(--cor-superficie); border-color: var(--cor-borda); }
+.rail-btn--ativo { background: var(--cor-primaria); color: var(--cor-primaria-ft); }
+.rail-btn--perigo:hover { background: var(--cor-perigo); color: var(--cor-perigo-ft); border-color: var(--cor-perigo); }
+.rail-btn svg { width: 18px; height: 18px; }
+.rail-spacer { flex: 1; }
+.rail-arraste { color: var(--cor-texto-fraco); cursor: move; } /* handle de arrastar */
+
+/* Painel deslizante (configurações / filtros) */
+.cartao__painel {
+  flex: 0 0 0; width: 0; overflow: hidden;
+  border-right: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+  transition: width .18s ease, flex-basis .18s ease;
+}
+.cartao__painel--aberto { flex-basis: 250px; width: 250px; }
+.painel-conteudo { width: 250px; height: 100%; overflow-y: auto; padding: 12px; }
+.painel-titulo { font-weight: 700; margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: .4px; color: var(--cor-texto-fraco); }
+
+/* Corpo do cartão: título editável + área do canvas */
+.cartao__corpo { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.cartao__titulo {
+  font-weight: 700; font-size: 15px; padding: 10px 14px 4px;
+  border: none; background: transparent; color: var(--cor-texto);
+  width: 100%; outline: none;
+}
+.cartao__titulo:focus { background: var(--cor-superficie-2); border-radius: var(--raio-sm); }
+.cartao__canvas-area { flex: 1; min-height: 0; position: relative; padding: 6px 12px 12px; }
+.cartao__canvas-area canvas { width: 100% !important; height: 100% !important; }
+
+/* Checkbox de seleção (modo imprimir vários) */
+.cartao__selecao {
+  position: absolute; top: 8px; right: 8px; z-index: 5;
+  display: none;
+  width: 26px; height: 26px; border-radius: 6px;
+  border: 2px solid var(--cor-primaria); background: var(--cor-superficie);
+  align-items: center; justify-content: center; cursor: pointer;
+}
+.cartao--selecionavel .cartao__selecao { display: flex; }
+.cartao--selecionado .cartao__selecao { background: var(--cor-primaria); color: var(--cor-primaria-ft); }
+
+/* ---------- Formulários dentro dos painéis --------------------------------- */
+.campo { margin-bottom: 12px; }
+.campo > label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--cor-texto-fraco); }
+.campo select, .campo input[type="text"], .campo input[type="number"] {
+  width: 100%; padding: 7px 8px; font: inherit;
+  border: 1px solid var(--cor-borda); border-radius: var(--raio-sm);
+  background: var(--cor-superficie); color: var(--cor-texto);
+}
+.campo--inline { display: flex; align-items: center; gap: 8px; }
+.campo--inline label { margin: 0; }
+.lista-series { display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; padding-right: 4px; }
+.lista-series label { display: flex; align-items: center; gap: 8px; font-weight: 500; color: var(--cor-texto); font-size: 13px; }
+.cor-serie { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.cor-serie input[type="color"] { width: 30px; height: 26px; padding: 0; border: 1px solid var(--cor-borda); border-radius: 5px; background: none; }
+.cor-serie span { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Filtros */
+.filtro-item { border: 1px solid var(--cor-borda); border-radius: var(--raio-sm); padding: 8px; margin-bottom: 8px; background: var(--cor-superficie-2); }
+.filtro-item .campo { margin-bottom: 6px; }
+.filtro-remover { font-size: 12px; color: var(--cor-perigo); background: none; border: none; cursor: pointer; padding: 0; font-weight: 600; }
+.painel-vazio { color: var(--cor-texto-fraco); font-size: 13px; padding: 8px 0; }
+
+/* ---------- Modais ---------------------------------------------------------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(16,24,40,.45);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.overlay--aberto { display: flex; }
+.modal {
+  background: var(--cor-superficie); border-radius: var(--raio);
+  box-shadow: var(--sombra-lg);
+  width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto;
+}
+.modal--largo { max-width: 620px; }
+.modal__cabeca { padding: 16px 18px; border-bottom: 1px solid var(--cor-borda); font-size: 16px; font-weight: 700; }
+.modal__corpo { padding: 18px; }
+.modal__rodape { padding: 14px 18px; border-top: 1px solid var(--cor-borda); display: flex; justify-content: flex-end; gap: 8px; }
+.modal__erro { color: var(--cor-perigo); font-size: 13px; margin-top: 8px; min-height: 18px; }
+
+.radio-grupo { display: flex; flex-direction: column; gap: 10px; margin: 8px 0 4px; }
+.radio-grupo label { display: flex; align-items: center; gap: 8px; }
+
+/* Lista de seleção (modo imprimir vários dentro do modal) */
+.lista-check { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow-y: auto; }
+.lista-check label { display: flex; align-items: center; gap: 10px; padding: 8px; border: 1px solid var(--cor-borda); border-radius: var(--raio-sm); }
+
+/* ---------- Toast (mensagens rápidas) -------------------------------------- */
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--cor-texto); color: #fff; padding: 10px 16px; border-radius: 999px;
+  font-size: 13px; box-shadow: var(--sombra-lg); opacity: 0; pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease; z-index: 80;
+}
+.toast--visivel { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Acessibilidade / responsivo ------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+.oculto { display: none !important; }
+
+/* ---------- Menu flutuante de exportação (aparece ao lado do botão) -------- */
+.menu-flutuante {
+  position: fixed; z-index: 90;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-sm);
+  box-shadow: var(--sombra-lg);
+  padding: 4px; display: flex; flex-direction: column; min-width: 130px;
+}
+.menu-flutuante button {
+  text-align: left; padding: 8px 10px; border: none; background: none;
+  border-radius: 5px; cursor: pointer; font: inherit; color: var(--cor-texto);
+}
+.menu-flutuante button:hover { background: var(--cor-superficie-2); }
+
+/* ---------- Barra de ações do modo "exportar vários" ---------------------- */
+.barra-selecao {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 70; display: flex; align-items: center; gap: 10px;
+  background: var(--cor-superficie); border: 1px solid var(--cor-borda);
+  border-radius: 999px; box-shadow: var(--sombra-lg); padding: 8px 12px;
+}
+.barra-selecao span { font-size: 13px; color: var(--cor-texto-fraco); margin-right: 4px; }
+
+/* ---------- Ajustes do gridstack (deixa o cartão preencher o item) -------- */
+.grid-stack-item-content {
+  inset: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  overflow: visible !important;
+}

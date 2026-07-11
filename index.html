@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualizador de Dados</title>
+
+  <!-- Estilos (tema fica em css/style.css :root; libs em vendor/) -->
+  <link rel="stylesheet" href="vendor/gridstack.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <header class="topo">
+    <span class="topo__marca" id="marca">Visualizador de Dados</span>
+    <div class="topo__spacer"></div>
+    <div class="topo__acoes" id="acoes" hidden>
+      <div class="topo__layout">
+        <span id="lbl-layout">Gráficos por linha</span>
+        <select id="sel-layout"></select>
+      </div>
+      <button class="btn btn--primario" id="btn-add">Adicionar gráfico</button>
+      <button class="btn" id="btn-salvar">Salvar projeto</button>
+      <button class="btn" id="btn-abrir">Abrir projeto</button>
+      <button class="btn" id="btn-imprimir">Imprimir / exportar vários</button>
+      <button class="btn btn--fantasma" id="btn-trocar">Trocar arquivo</button>
+      <span class="autosave" id="autosave">
+        <span class="autosave__ponto"></span><span id="autosave-txt"></span>
+      </span>
+    </div>
+  </header>
+
+  <!-- Área principal -->
+  <main class="palco">
+    <!-- Estado vazio: importar planilha -->
+    <div class="dropzone" id="dropzone">
+      <h2 id="dz-titulo">Importe uma planilha para começar</h2>
+      <p id="dz-sub">Arraste um arquivo aqui ou clique para selecionar</p>
+      <button class="btn btn--primario" id="dz-btn">Selecionar arquivo</button>
+    </div>
+
+    <!-- Grade de gráficos -->
+    <div class="grid-stack" id="grid" hidden></div>
+  </main>
+
+  <!-- Inputs de arquivo (escondidos) -->
+  <input type="file" id="file-planilha" accept=".xlsx,.xlsm,.xls,.csv" hidden>
+  <input type="file" id="file-projeto" accept=".json" hidden>
+
+  <!-- Overlay de modais e toast de mensagens -->
+  <div class="overlay" id="overlay"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ==== Bibliotecas (offline, na pasta vendor/) ==== -->
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="vendor/gridstack-all.js"></script>
+  <script src="vendor/jspdf.umd.min.js"></script>
+
+  <!-- ==== Módulos do app (a ORDEM importa) ==== -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/parser.js"></script>
+  <script src="js/aggregate.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chartCard.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/project.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
